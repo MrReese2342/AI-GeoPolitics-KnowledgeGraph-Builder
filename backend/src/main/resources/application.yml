@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: backend
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: password
+
+management:
+  endpoint:
+    health:
+      show-details: always

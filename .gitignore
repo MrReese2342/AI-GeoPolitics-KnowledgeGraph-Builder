@@ -1,0 +1,20 @@
+# Java
+/backend/target/
+**/target/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes / Neo4j
+data/
+logs/
+
+# Env
+.env
