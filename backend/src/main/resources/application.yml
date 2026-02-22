@@ -7,6 +7,10 @@ spring:
       username: neo4j
       password: password
 
+ollama:
+  base-url: http://localhost:11434
+  model: llama3.1
+
 management:
   endpoint:
     health:

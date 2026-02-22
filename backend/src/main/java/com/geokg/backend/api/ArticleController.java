@@ -6,6 +6,9 @@ import com.geokg.backend.repo.ArticleRepository;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import com.geokg.backend.ai.dto.ExtractionResult;
+import com.geokg.backend.service.ArticleAnalysisService;
+
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
@@ -15,9 +18,11 @@ import java.util.UUID;
 public class ArticleController {
 
     private final ArticleRepository articleRepository;
+    private final ArticleAnalysisService analysisService;
 
-    public ArticleController(ArticleRepository articleRepository) {
+    public ArticleController(ArticleRepository articleRepository, ArticleAnalysisService analysisService) {
         this.articleRepository = articleRepository;
+        this.analysisService = analysisService;
     }
 
     @PostMapping
@@ -34,15 +39,14 @@ public class ArticleController {
 
         articleRepository.save(article);
 
+        ExtractionResult extracted = analysisService.analyzeAndPersist(article);
+
         return Map.of(
                 "articleId", id,
-                "ingestedAt", article.getIngestedAt().toString()
+                "ingestedAt", article.getIngestedAt().toString(),
+                "actors", extracted.actors().size(),
+                "events", extracted.events().size(),
+                "interactions", extracted.interactions().size()
         );
-    }
-
-    @GetMapping("/{id}")
-    public Article getById(@PathVariable String id) {
-        return articleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Article not found: " + id));
     }
 }
